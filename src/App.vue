@@ -1,32 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view />
   </div>
 </template>
+<script>
+import "./styles/reset.css";
+export default {
+  name: "AnimalCross"
+};
+</script>
+<style lang="scss">
+.tooltip {
+  &.popover {
+    $color: #f9f9f9;
+    background: #fff;
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+    .popover-inner {
+      box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
+      color: black;
+      background: #fff;
+      border-radius: 5px;
+      padding: 6px;
+    }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+    .popover-arrow {
+      border-color: $color;
+    }
+  }
 }
 </style>
