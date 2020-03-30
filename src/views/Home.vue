@@ -112,7 +112,7 @@ export default {
       listData: [],
       curHemi: 0,
       curType: 0,
-      showModal: true,
+      showModal: false,
       curItem: {},
       Month: [
         "Jan",
@@ -162,7 +162,6 @@ export default {
       this.curHemi = hemi;
     },
     onItemClick(item) {
-      console.log(item);
       this.showModal = true;
       this.curItem = item;
     }

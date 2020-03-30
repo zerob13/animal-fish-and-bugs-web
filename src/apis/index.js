@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "http://li.zerob13.com:8080/function/ac";
-const BASE_URL = "http://192.168.10.189:8080/function/ac";
+const BASE_URL = "http://li.zerob13.com:8080/function/ac";
+// const BASE_URL = "http://192.168.10.189:8080/function/ac";
 export default function getData(isSouthern = false, type = "fish") {
   let url = "";
   if (!isSouthern) {
