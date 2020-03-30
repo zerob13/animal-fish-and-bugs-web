@@ -21,10 +21,6 @@
         <span class="label">Time: </span>
         <span class="text">{{ curItem["Time"] }}</span>
       </div>
-      <div class="info-line">
-        <span class="label">Time: </span>
-        <span class="text">{{ curItem["Time"] }}</span>
-      </div>
       <div class="cal">
         <div
           class="cal-item"
