@@ -221,7 +221,7 @@ export default {
 }
 .detail-modal {
   display: block;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
