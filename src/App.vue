@@ -10,6 +10,11 @@ export default {
 };
 </script>
 <style lang="scss">
+#app {
+  min-height: 100%;
+  position: relative;
+  background: #b47157;
+}
 .tooltip {
   &.popover {
     $color: #f9f9f9;

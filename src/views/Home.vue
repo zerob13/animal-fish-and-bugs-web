@@ -31,7 +31,7 @@
           {{ m }}
         </div>
       </div>
-      <div class="avatar">
+      <div class="avatar" :class="{ fish: curType == 0, bug: curType == 1 }">
         <img v-if="curItem.Image !== 'Unknown'" :src="curItem.Image" alt="" />
         <div class="unknow-avatar" v-else>Image Unknow</div>
       </div>
@@ -70,28 +70,79 @@
       </div>
     </div>
     <div class="list-wrap">
+      <div class="loading" v-if="isLoading && listData.length === 0">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div
         class="item-wrap"
         v-for="(item, idx) in listData"
         :key="item._id"
         @click="onItemClick(item)"
+        :class="{
+          '-check': item[curMonth]
+        }"
       >
         <div
           v-if="item.Image !== 'Unknown'"
           class="list-item "
           :style="{ 'background-image': `url(${item.Image})` }"
-          :class="{ '-border': (idx + 1) % 5 == 0 }"
+          :class="{
+            '-border': (idx + 1) % 5 == 0,
+            '-bottom': idx > listData.length - 6
+          }"
           :title="item.Name"
         ></div>
         <div
           v-else
           class="list-item -unknown"
-          :class="{ '-border': (idx + 1) % 5 == 0 }"
+          :class="{
+            '-border': (idx + 1) % 5 == 0,
+            '-bottom': idx > listData.length - 6
+          }"
           :title="item.Name"
         >
-          ?
+          <!-- ? -->
+          {{ item.Name }}
         </div>
       </div>
+    </div>
+    <div class="contact-info" v-show="!isLoading">
+      <a
+        target="_blank"
+        href="https://github.com/zerob13/animal-fish-and-bugs-web/fork"
+      >
+        <img
+          src="https://img.shields.io/github/forks/zerob13/animal-fish-and-bugs-web?label=Fork&style=social"
+          alt="fork-me-on-github"
+        />
+      </a>
+      <a
+        target="_blank"
+        href="https://github.com/zerob13/animal-fish-and-bugs-web"
+      >
+        <img
+          src="https://img.shields.io/github/watchers/zerob13/animal-fish-and-bugs-web?label=watch&style=social"
+          alt="watch-me-on-github"
+        />
+      </a>
+      <a
+        target="_blank"
+        href="https://github.com/zerob13/animal-fish-and-bugs-web"
+      >
+        <img
+          src="https://img.shields.io/github/stars/zerob13/animal-fish-and-bugs-web?style=social"
+          alt="star-me-on-github"
+        />
+      </a>
+      <a target="_blank" href="https://twitter.com/zerob13">
+        <img
+          src="https://img.shields.io/twitter/follow/zerob13?label=Follow"
+          alt="fork-me-on-github"
+        />
+      </a>
     </div>
   </div>
 </template>
@@ -123,7 +174,8 @@ export default {
         "Oct",
         "Nov",
         "Dec"
-      ]
+      ],
+      isLoading: false
     };
   },
   watch: {
@@ -134,22 +186,37 @@ export default {
       this.fetchData();
     }
   },
+  computed: {
+    curMonth() {
+      const n = new Date();
+      return this.Month[n.getMonth()];
+    }
+  },
   mounted() {
     this.fetchData();
   },
   methods: {
     fetchData() {
+      this.isLoading = true;
       const hashKey = `${this.curHemi}-${this.curType}`;
+      this.listData = [];
       if (cacheData[hashKey]) {
         this.listData = cacheData[hashKey];
+        this.isLoading = false;
         return;
       }
       let hemi = !!this.curHemi;
       let type = this.curType == 0 ? "fish" : "bug";
-      getData(hemi, type).then(resp => {
-        this.listData = resp;
-        cacheData[hashKey] = resp;
-      });
+      getData(hemi, type)
+        .then(resp => {
+          this.listData = resp;
+          cacheData[hashKey] = resp;
+          this.isLoading = false;
+        })
+        .catch(e => {
+          this.isLoading = false;
+          console.log(e);
+        });
     },
     handleType(type) {
       this.curType = type;
@@ -165,8 +232,11 @@ export default {
 };
 </script>
 <style lang="scss">
+@import "../styles/loading.scss";
 .home {
   background: #b47157;
+  padding-bottom: 12px;
+  min-height: 100%;
 }
 .list-wrap {
   display: flex;
@@ -176,6 +246,12 @@ export default {
   overflow-x: hidden;
   justify-content: center;
   position: relative;
+  transition: height 0.8s ease-in;
+  .item-wrap {
+    &.-check {
+      background-color: #b1b479;
+    }
+  }
   .list-item {
     width: 18vw;
     height: 18vw;
@@ -185,17 +261,22 @@ export default {
     background-position: center;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
+
     &:hover {
       box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.257);
     }
     &.-border {
       border-right: 1px solid #ccc;
     }
+    &.-bottom {
+      border-bottom: 1px solid #ccc;
+    }
     &.-unknown {
       text-align: center;
-      line-height: 18vw;
       color: #fff;
-      font-size: 16px;
+      font-size: 14px;
+      word-break: break-word;
+      overflow: hidden;
     }
   }
 }
@@ -219,6 +300,21 @@ export default {
     }
   }
 }
+.contact-info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+}
+// .loading {
+//   display: block;
+//   position: fixed;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   background: rgba(0, 0, 0, 0.15);
+//   z-index: 233;
+//   border-radius: 50%;
+// }
 .detail-modal {
   display: block;
   position: fixed;
@@ -280,19 +376,62 @@ export default {
     }
   }
   .avatar {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    text-align: center;
+    height: 60px;
     display: block;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    margin-top: 12px;
+    position: relative;
+    overflow: hidden;
+    z-index: 222;
     img {
-      width: 100%;
       height: 100%;
+      z-index: 223;
+    }
+    &.fish {
+      &::after {
+        background-image: url("../assets/waves.png");
+        position: absolute;
+        opacity: 0.6;
+        content: " ";
+        bottom: 0px;
+        width: 300px;
+        border-radius: 100%;
+        transition: all 3s ease-out;
+        border-radius: 15px;
+        height: 60px;
+        animation: water 5s infinite;
+      }
+    }
+    &.bug {
+      background-color: #bdd4e7;
+      background-image: linear-gradient(315deg, #bdd4e7 0%, #8693ab 74%);
     }
     .unknow-avatar {
       height: 100px;
-      padding-top: 30px;
+      padding-top: 20px;
       text-align: center;
       display: inline-block;
     }
+  }
+}
+@keyframes water {
+  0% {
+    height: 60px;
+    left: -120px;
+    background-position: top right;
+  }
+  50% {
+    height: 100px;
+    left: 0px;
+    background-position: top left;
+  }
+  100% {
+    height: 60px;
+    left: -120px;
+    background-position: top right;
   }
 }
 </style>
