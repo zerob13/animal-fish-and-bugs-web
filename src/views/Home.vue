@@ -1,42 +1,5 @@
 <template>
   <div class="home">
-    <div class="detail-modal" v-if="showModal">
-      <div class="info-line">
-        <span class="label">Name: </span>
-        <span class="text">{{ curItem.Name }}</span>
-      </div>
-      <div class="info-line">
-        <span class="label">Price: </span>
-        <span class="text">{{ curItem.Price }}</span>
-      </div>
-      <div class="info-line">
-        <span class="label">Location: </span>
-        <span class="text">{{ curItem.Location }}</span>
-      </div>
-      <div class="info-line" v-if="curType == 0">
-        <span class="label">Shadow size: </span>
-        <span class="text">{{ curItem["Shadow size"] }}</span>
-      </div>
-      <div class="info-line">
-        <span class="label">Time: </span>
-        <span class="text">{{ curItem["Time"] }}</span>
-      </div>
-      <div class="cal">
-        <div
-          class="cal-item"
-          v-for="m in Month"
-          :key="m"
-          :class="{ check: curItem[m] }"
-        >
-          {{ m }}
-        </div>
-      </div>
-      <div class="avatar" :class="{ fish: curType == 0, bug: curType == 1 }">
-        <img v-if="curItem.Image !== 'Unknown'" :src="curItem.Image" alt="" />
-        <div class="unknow-avatar" v-else>Image Unknow</div>
-      </div>
-      <div class="close-btn" @click="showModal = false">Close Me</div>
-    </div>
     <div class="tab-line">
       <div
         class="btn"
@@ -143,6 +106,43 @@
           alt="fork-me-on-github"
         />
       </a>
+    </div>
+    <div class="detail-modal" v-if="showModal">
+      <div class="info-line">
+        <span class="label">Name: </span>
+        <span class="text">{{ curItem.Name }}</span>
+      </div>
+      <div class="info-line">
+        <span class="label">Price: </span>
+        <span class="text">{{ curItem.Price }}</span>
+      </div>
+      <div class="info-line">
+        <span class="label">Location: </span>
+        <span class="text">{{ curItem.Location }}</span>
+      </div>
+      <div class="info-line" v-if="curType == 0">
+        <span class="label">Shadow size: </span>
+        <span class="text">{{ curItem["Shadow size"] }}</span>
+      </div>
+      <div class="info-line">
+        <span class="label">Time: </span>
+        <span class="text">{{ curItem["Time"] }}</span>
+      </div>
+      <div class="cal">
+        <div
+          class="cal-item"
+          v-for="m in Month"
+          :key="m"
+          :class="{ check: curItem[m] }"
+        >
+          {{ m }}
+        </div>
+      </div>
+      <div class="avatar" :class="{ fish: curType == 0, bug: curType == 1 }">
+        <img v-if="curItem.Image !== 'Unknown'" :src="curItem.Image" alt="" />
+        <div class="unknow-avatar" v-else>Image Unknow</div>
+      </div>
+      <div class="close-btn" @click="showModal = false">Close Me</div>
     </div>
   </div>
 </template>
@@ -284,7 +284,11 @@ export default {
   display: flex;
   position: relative;
   flex-direction: row;
-  padding: 10px 16px;
+  padding: 0px 16px 10px;
+  &:first-child {
+    padding-top: 10px;
+  }
+
   .btn {
     flex: 1;
     width: 50%;
@@ -292,7 +296,12 @@ export default {
     text-align: center;
     border: 1px solid #eeeceb;
     background: #828282;
+    color: #eee;
+    border-left: none;
+    padding: 2px 4px;
+    font-size: 14px;
     &:first-child {
+      border-left: 1px solid #eeeceb;
       border-right: none;
     }
     &.active {
@@ -350,14 +359,18 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     .cal-item {
       margin-top: 8px;
       // background: #cccccc;
-      margin-right: 12px;
-      padding: 10px;
+      width: 15vw;
+      height: 44px;
+      text-align: center;
+      line-height: 44px;
+      border: 1px dashed #000;
+      box-sizing: border-box;
       &.check {
-        background: green;
+        background-color: #bec23f;
         color: #fff;
       }
     }
