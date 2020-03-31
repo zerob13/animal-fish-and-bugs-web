@@ -213,9 +213,8 @@ export default {
           cacheData[hashKey] = resp;
           this.isLoading = false;
         })
-        .catch(e => {
+        .catch(() => {
           this.isLoading = false;
-          console.log(e);
         });
     },
     handleType(type) {
