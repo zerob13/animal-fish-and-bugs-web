@@ -6,7 +6,7 @@ const utils = {
     }
     return {
       setItem() {
-        console.log("nothing");
+        return;
       },
       getItem() {
         return null;
