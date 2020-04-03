@@ -150,6 +150,7 @@
 <script>
 // @ is an alias to /src
 import getData from "../apis";
+import utils from "../utils";
 const cacheData = [];
 export default {
   name: "Home",
@@ -205,12 +206,23 @@ export default {
         this.isLoading = false;
         return;
       }
+      const lsData = utils.getJson(`ac-api-cache-${hashKey}`);
+      if (lsData) {
+        this.listData = lsData;
+        this.isLoading = false;
+      }
       let hemi = !!this.curHemi;
       let type = this.curType == 0 ? "fish" : "bug";
       getData(hemi, type)
         .then(resp => {
-          this.listData = resp;
+          if (
+            hemi === !!this.curHemi ||
+            type == (this.curType == 0 ? "fish" : "bug")
+          ) {
+            this.listData = resp;
+          }
           cacheData[hashKey] = resp;
+          utils.saveJson(`ac-api-cache-${hashKey}`, resp);
           this.isLoading = false;
         })
         .catch(() => {
